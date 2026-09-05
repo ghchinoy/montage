@@ -1,0 +1,114 @@
+digraph MontageArchitecture {
+    graph [
+        rankdir=LR,
+        bgcolor="#ffffff",
+        fontname="Helvetica,Arial,sans-serif",
+        fontsize=13,
+        pad="0.3",
+        nodesep="0.5",
+        ranksep="0.7",
+        compound=true
+    ];
+
+    node [
+        fontname="Helvetica,Arial,sans-serif",
+        fontsize=11,
+        shape=box,
+        style="rounded,filled",
+        fillcolor="#f8fafc",
+        color="#cbd5e1",
+        penwidth=1.5,
+        margin="0.25,0.15"
+    ];
+
+    edge [
+        fontname="Helvetica,Arial,sans-serif",
+        fontsize=10,
+        color="#64748b",
+        penwidth=1.3,
+        arrowsize=0.8
+    ];
+
+    // Ingestion Layer
+    subgraph cluster_ingestion {
+        label="1. Ingestion Layer";
+        fontname="Helvetica-Bold";
+        fontsize=12;
+        fillcolor="#f1f5f9";
+        style="rounded,filled";
+        color="#cbd5e1";
+
+        local_dir [label="Local Directory\n(AST / Tree)", fillcolor="#ffffff"];
+        github_repo [label="GitHub Repo\n(gh CLI Shallow Clone)", fillcolor="#ffffff"];
+        hygiene [label="Filesystem Hygiene\n(Skip .venv, caches)", shape=note, fillcolor="#fef3c7", color="#f59e0b"];
+    }
+
+    // Multi-Layer Discovery
+    subgraph cluster_discovery {
+        label="2. Multi-Layer Discovery Engine";
+        fontname="Helvetica-Bold";
+        fontsize=12;
+        fillcolor="#f8fafc";
+        style="rounded,filled";
+        color="#94a3b8";
+
+        layer_api [label="Layer 1: REST / HTTP APIs\n(FastAPI, Express, Gin)", fillcolor="#e0f2fe", color="#0284c7"];
+        layer_cli [label="Layer 2: CLI Trees & Groups\n(Cobra, Click, Clap)", fillcolor="#e0f2fe", color="#0284c7"];
+        layer_scripts [label="Layer 3: Standalone Scripts\n(scripts/, tools/)", fillcolor="#e0f2fe", color="#0284c7"];
+        layer_prompts [label="Layer 4: Authored Prompts\n(prompts/*.md Personas)", fillcolor="#e0f2fe", color="#0284c7"];
+        layer_pkgs [label="Layer 5: Package Engines\n(pkg/* Domain Modules)", fillcolor="#e0f2fe", color="#0284c7"];
+    }
+
+    // Evaluation & Decision Matrix
+    subgraph cluster_evaluator {
+        label="3. Evaluation & 4-Tier Decision Matrix";
+        fontname="Helvetica-Bold";
+        fontsize=12;
+        fillcolor="#f8fafc";
+        style="rounded,filled";
+        color="#94a3b8";
+
+        scorecard [label="5-Dimension Scorecard\n(Auto, Data, Safety, Auth, Pack)", fillcolor="#fef9c3", color="#ca8a04"];
+        decision_matrix [label="Cognitive vs Compute vs State\nDecision Matrix", shape=diamond, fillcolor="#f3e8ff", color="#9333ea"];
+        clustering [label="Persona Clustering &\nSemantic Slug Synthesis", fillcolor="#f3e8ff", color="#9333ea"];
+    }
+
+    // Agent Ecosystem Output
+    subgraph cluster_artifacts {
+        label="4. Agent Ecosystem Tooling Output";
+        fontname="Helvetica-Bold";
+        fontsize=12;
+        fillcolor="#f0fdf4";
+        style="rounded,filled";
+        color="#86efac";
+
+        out_pure [label="📝 Pure Skills\n(Domain rules, triage, personas)", fillcolor="#dcfce7", color="#16a34a"];
+        out_code [label="⚡ Skills with Code\n(Scripts saving 70-90% tokens)", fillcolor="#dcfce7", color="#16a34a"];
+        out_mcp [label="🔌 Clustered MCP Server\n(Typed stdio tools by persona)", fillcolor="#dcfce7", color="#16a34a"];
+        out_plugin [label="🧩 Agent Plugin\n(plugin.json + mcp.json bundle)", fillcolor="#dcfce7", color="#16a34a"];
+    }
+
+    // Connections
+    local_dir -> hygiene;
+    github_repo -> hygiene;
+
+    hygiene -> layer_api;
+    hygiene -> layer_cli;
+    hygiene -> layer_scripts;
+    hygiene -> layer_prompts;
+    hygiene -> layer_pkgs;
+
+    layer_api -> scorecard;
+    layer_cli -> scorecard;
+    layer_scripts -> scorecard;
+    layer_prompts -> scorecard;
+    layer_pkgs -> scorecard;
+
+    scorecard -> decision_matrix;
+    decision_matrix -> clustering;
+
+    clustering -> out_pure [label="Guidelines"];
+    clustering -> out_code [label="Data Pre-processing"];
+    clustering -> out_mcp [label="Live State & APIs"];
+    clustering -> out_plugin [label="Packaged Bundle"];
+}

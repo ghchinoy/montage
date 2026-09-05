@@ -1,0 +1,94 @@
+digraph MontagePipeline {
+    graph [
+        rankdir=TB,
+        bgcolor="#ffffff",
+        fontname="Helvetica,Arial,sans-serif",
+        fontsize=13,
+        pad="0.3",
+        nodesep="0.4",
+        ranksep="0.5"
+    ];
+
+    node [
+        fontname="Helvetica,Arial,sans-serif",
+        fontsize=11,
+        shape=box,
+        style="rounded,filled",
+        fillcolor="#f8fafc",
+        color="#cbd5e1",
+        penwidth=1.5
+    ];
+
+    edge [
+        fontname="Helvetica,Arial,sans-serif",
+        fontsize=10,
+        color="#475569",
+        penwidth=1.3,
+        arrowsize=0.8
+    ];
+
+    start [label="Target Input\n(Path or ghchinoy/repo)", shape=ellipse, fillcolor="#e0e7ff", color="#4f46e5"];
+    clone [label="Ingest / Shallow Clone\n(sources/<owner>/<repo>)", fillcolor="#ffffff"];
+    filter [label="Walk & Hygiene Filter\n(Skip .venv, node_modules, caches)", fillcolor="#fef3c7", color="#f59e0b"];
+
+    subgraph cluster_extract {
+        label="Parallel Capability Scanning";
+        style="rounded,dashed";
+        color="#94a3b8";
+
+        extract_api [label="Extract REST Routes\n(@app.post, models, docstrings)"];
+        extract_cli [label="Extract Cobra Trees\n(GroupID, parents, flags)"];
+        extract_prompts [label="Extract Prompts\n(prompts/*.md sub-agent personas)"];
+        extract_pkgs [label="Extract Domain Packages\n(pkg/* generators, orchestrator)"];
+    }
+
+    subgraph cluster_eval {
+        label="Evaluation & Decision Engine";
+        style="rounded,dashed";
+        color="#94a3b8";
+
+        score [label="Compute 5-Dimension Scorecard\n(Auto, Data, Safety, Auth, Pack)"];
+        classify [label="Classify Target Category\n(Pure vs Code vs MCP vs CLI)"];
+        cluster [label="Cluster by Operational Persona\n(Synthesize semantic slugs)"];
+    }
+
+    subgraph cluster_render {
+        label="Artifact Generation Engine";
+        style="rounded,dashed";
+        color="#94a3b8";
+
+        report_md [label="Generate MONTAGE_ASSESSMENT.md\n(Scorecard, Capability Table, Roadmap)"];
+        report_json [label="Generate montage.json\n(Machine-readable dataset)"];
+        scaffold_skills [label="Scaffold Specialized SKILL.mds\n(Domain rules & execution protocols)"];
+        scaffold_scripts [label="Scaffold Helper Scripts\n(Local 85% token reducers)"];
+        scaffold_mcp [label="Scaffold MCP Server Starter\n(Python FastMCP / Go SDK)"];
+        scaffold_plugin [label="Scaffold Agent Plugin Bundle\n(plugin.json + mcp.json)"];
+    }
+
+    done [label="Ecosystem Ready!\n(Installed in .agents/skills or plugins/)", shape=doubleoctagon, fillcolor="#dcfce7", color="#16a34a"];
+
+    start -> clone -> filter;
+    filter -> extract_api;
+    filter -> extract_cli;
+    filter -> extract_prompts;
+    filter -> extract_pkgs;
+
+    extract_api -> score;
+    extract_cli -> score;
+    extract_prompts -> score;
+    extract_pkgs -> score;
+
+    score -> classify -> cluster;
+
+    cluster -> report_md;
+    cluster -> report_json;
+    cluster -> scaffold_skills;
+    cluster -> scaffold_scripts;
+    cluster -> scaffold_mcp;
+    cluster -> scaffold_plugin;
+
+    report_md -> done;
+    scaffold_skills -> done;
+    scaffold_mcp -> done;
+    scaffold_plugin -> done;
+}

@@ -1,0 +1,46 @@
+# Binaries and build artifacts
+/bin/
+/montage
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Montage dynamic ingestion and assessment outputs
+/sources/
+/out/
+
+# Frontend / Node / Vite
+node_modules/
+ui/node_modules/
+ui/dist/
+ui/dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.eslintcache
+
+# Visual assets (dot -> webp tracked; pngs ignored)
+*.png
+
+# Environment and credentials
+.env
+.env.*
+!.env.example
+
+# OS and Editor files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
