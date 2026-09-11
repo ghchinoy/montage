@@ -10,7 +10,8 @@ Montage reviews applications and codebases to evaluate their readiness for the a
 
 ## 📖 Documentation & Architecture
 
-* 📘 **[User & Operator Guide](docs/user-guide.md):** Complete guide to CLI commands, GitHub ingestion, interpreting scorecards, and using scaffolded tooling.
+* 🌐 **[Documentation Site](https://ghchinoy.github.io/montage/):** Complete Astro Starlight documentation site with Catppuccin Latte theme.
+* 📘 **[User & Operator Guide](docs/user-guide.md):** Guide to CLI commands, GitHub ingestion, interpreting scorecards, and using scaffolded tooling.
 * 🏛️ **[Skills Assessor Architecture & Theory](docs/skills-assessor-architecture.md):** Deep dive into the multi-layer discovery engine, 4-tier decision matrix, token economics, and persona clustering.
 
 ---

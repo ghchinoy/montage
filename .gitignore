@@ -18,6 +18,8 @@ node_modules/
 ui/node_modules/
 ui/dist/
 ui/dist-ssr/
+docs-site/dist/
+docs-site/.astro/
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*

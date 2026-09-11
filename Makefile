@@ -2,7 +2,7 @@ BINARY  := montage
 BIN_DIR := bin
 PKG     := .
 
-.PHONY: build build-ui build-embedded clean test vet fmt install run all docs-diagrams deploy
+.PHONY: build build-ui build-embedded clean test vet fmt install run all docs-diagrams deploy docs-dev docs-build
 
 all: build-embedded
 
@@ -19,6 +19,12 @@ build-embedded: build-ui
 docs-diagrams:
 	dot -Twebp docs/architecture.dot -o docs/architecture.webp
 	dot -Twebp docs/pipeline.dot -o docs/pipeline.webp
+
+docs-dev:
+	cd docs-site && npm run dev
+
+docs-build:
+	cd docs-site && npm run build
 
 build:
 	@mkdir -p $(BIN_DIR)

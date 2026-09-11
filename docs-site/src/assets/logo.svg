@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+  <!-- Catppuccin Latte Lavender & Sapphire filmstrip glyph -->
+  <rect width="36" height="36" rx="9" fill="#7287fd"/>
+  <!-- Film perforation holes -->
+  <rect x="4" y="5" width="4" height="4" rx="1" fill="#eff1f5"/>
+  <rect x="4" y="13" width="4" height="4" rx="1" fill="#eff1f5"/>
+  <rect x="4" y="21" width="4" height="4" rx="1" fill="#eff1f5"/>
+  <rect x="4" y="29" width="4" height="4" rx="1" fill="#eff1f5"/>
+  <rect x="28" y="5" width="4" height="4" rx="1" fill="#eff1f5"/>
+  <rect x="28" y="13" width="4" height="4" rx="1" fill="#eff1f5"/>
+  <rect x="28" y="21" width="4" height="4" rx="1" fill="#eff1f5"/>
+  <rect x="28" y="29" width="4" height="4" rx="1" fill="#eff1f5"/>
+  <!-- Central lens aperture / playframe -->
+  <path d="M12 9h12v18H12z" fill="#209fb5" rx="2"/>
+  <polygon points="16,13 22,18 16,23" fill="#eff1f5"/>
+</svg>

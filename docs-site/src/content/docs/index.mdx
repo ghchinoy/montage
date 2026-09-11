@@ -1,0 +1,55 @@
+---
+title: Montage 🎞️
+description: Agent Ecosystem Readiness Assessor & Tooling Scaffolder (CLI + MCP Server)
+template: splash
+hero:
+  tagline: Review applications, score agent ecosystem readiness across 5 dimensions, and scaffold turn-key Agent Plugins, Skills, and MCP servers.
+  image:
+    file: ../../assets/logo.svg
+  actions:
+    - text: Quick Start
+      link: /montage/getting-started/quickstart/
+      icon: right-arrow
+      variant: primary
+    - text: User Guide
+      link: /montage/guides/user-guide/
+      icon: document
+      variant: secondary
+    - text: View on GitHub
+      link: https://github.com/ghchinoy/montage
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Why Montage?
+
+<CardGrid stagger>
+  <Card title="5-Dimension Readiness Scorecard" icon="pencil">
+    Scores codebases across **Interface Automation**, **Data Interchange**, **Execution Safety**, **Auth & Config**, and **Runtime & Packaging** to determine agent feasibility.
+  </Card>
+  <Card title="Multi-Tier Tooling Scaffolder" icon="puzzle">
+    Generates **Pure Skills**, **Skills with Code** (60–90% token savings), **Clustered MCP Servers**, and standard **Agent Plugins**.
+  </Card>
+  <Card title="Fine-Grained Capability Discovery" icon="magnifier">
+    Deconstructs applications into discrete capabilities across CLI command trees (Cobra, Click, Clap), REST/HTTP APIs (FastAPI, Express, Gin), and standalone scripts.
+  </Card>
+  <Card title="Built-in MCP Server & Web Dashboard" icon="laptop">
+    Operate Montage over `stdio` from Claude Desktop, OpenCode, Cursor, and Antigravity, or run the Lit WebComponent dashboard on Google Cloud Run.
+  </Card>
+</CardGrid>
+
+---
+
+## The Readiness Spectrum
+
+Montage classifies every application into one of five operational readiness tiers:
+
+| Tier | Name | Readiness Profile | Recommended Agent Artifact |
+|:---:|---|---|---|
+| **Tier 5** | **Agent-Native** | Non-interactive, JSON serialization, `--dry-run`, headless auth | Turn-key **Agent Plugin** & **MCP Server** |
+| **Tier 4** | **Agent-Capable** | Scriptable or CLI-based with minor interactive gaps | **Clustered MCP Server** with light glue |
+| **Tier 3** | **Scriptable** | Utility scripts and subcommands available | **Skill with Code** (deterministic script wrapper) |
+| **Tier 2** | **Workflow-Only** | Procedural, algorithmic, or internal library | **Pure Skill** (procedural rules & guidelines) |
+| **Tier 1** | **Manual / GUI-Bound** | Dependent on browser interaction or TTY prompts | Modernization required before agent exposure |
