@@ -315,7 +315,7 @@ func buildSkillWithCodeRec(target model.TargetInfo, f model.AnalysisFindings, sc
 		subScore = 90
 	}
 
-	scripts := []string{}
+	var scripts []string
 	if f.HasCLI {
 		scripts = append(scripts, fmt.Sprintf("bin/%s or bundled helper CLI", appName))
 	} else {
@@ -355,10 +355,10 @@ func buildMCPServerRec(target model.TargetInfo, f model.AnalysisFindings, score 
 				Description: fmt.Sprintf("Executes %s %s (%s)", appName, cmd.Name, cmd.Description),
 				IsReadOnly:  !cmd.IsMutating,
 				SourceCmd:   cmd.Name,
-				Parameters: map[string]interface{}{
+				Parameters: map[string]any{
 					"type": "object",
-					"properties": map[string]interface{}{
-						"options": map[string]interface{}{
+					"properties": map[string]any{
+						"options": map[string]any{
 							"type":        "string",
 							"description": "CLI parameters and target spec",
 						},

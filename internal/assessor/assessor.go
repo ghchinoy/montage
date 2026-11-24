@@ -13,7 +13,7 @@ import (
 )
 
 // Version of Montage.
-const Version = "0.2.0"
+const Version = "0.2.1"
 
 // RunAssessment conducts the full target ingestion, code analysis, and readiness evaluation.
 func RunAssessment(ctx context.Context, targetInput, sourcesDir string, useLLM bool) (*model.AssessmentReport, error) {

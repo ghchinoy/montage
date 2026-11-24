@@ -53,18 +53,18 @@ func main() {
 	}
 
 	if !findings.HasCLI {
-		t.Errorf("expected HasCLI=true")
+		t.Errorf("AnalyzeCodebase(%q) HasCLI = false, want true", tempDir)
 	}
 	if findings.CLIFramework != "cobra" {
-		t.Errorf("expected CLIFramework=cobra, got %s", findings.CLIFramework)
+		t.Errorf("AnalyzeCodebase(%q) CLIFramework = %q, want %q", tempDir, findings.CLIFramework, "cobra")
 	}
 	if findings.BuildSystem != "go" {
-		t.Errorf("expected BuildSystem=go, got %s", findings.BuildSystem)
+		t.Errorf("AnalyzeCodebase(%q) BuildSystem = %q, want %q", tempDir, findings.BuildSystem, "go")
 	}
 	if len(findings.EnvVarsDetected) == 0 || findings.EnvVarsDetected[0] != "SAMPLE_API_KEY" {
-		t.Errorf("expected SAMPLE_API_KEY detected in env vars, got %v", findings.EnvVarsDetected)
+		t.Errorf("AnalyzeCodebase(%q) EnvVarsDetected = %v, want SAMPLE_API_KEY first", tempDir, findings.EnvVarsDetected)
 	}
 	if target.PrimaryLang != "Go" {
-		t.Errorf("expected PrimaryLang=Go, got %s", target.PrimaryLang)
+		t.Errorf("AnalyzeCodebase(%q) PrimaryLang = %q, want %q", tempDir, target.PrimaryLang, "Go")
 	}
 }

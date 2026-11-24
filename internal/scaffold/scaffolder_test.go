@@ -48,7 +48,7 @@ func TestGenerateArtifacts(t *testing.T) {
 	}
 
 	if len(files) < 4 {
-		t.Errorf("expected at least 4 generated files, got %d", len(files))
+		t.Errorf("GenerateArtifacts(%q) len(files) = %d, want >= 4", rep.Target.Name, len(files))
 	}
 
 	// Verify plugin.json exists

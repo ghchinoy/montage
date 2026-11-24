@@ -18,19 +18,19 @@ func TestHandleHealth(t *testing.T) {
 	handleHealth(rec, req)
 
 	if rec.Code != http.StatusOK {
-		t.Fatalf("expected status 200, got %d", rec.Code)
+		t.Fatalf("handleHealth(GET /health) status = %d, want %d", rec.Code, http.StatusOK)
 	}
 
 	var data map[string]string
 	if err := json.Unmarshal(rec.Body.Bytes(), &data); err != nil {
-		t.Fatalf("failed to parse JSON response: %v", err)
+		t.Fatalf("json.Unmarshal(handleHealth body) error = %v", err)
 	}
 
 	if data["status"] != "ok" {
-		t.Errorf("expected status 'ok', got '%s'", data["status"])
+		t.Errorf("handleHealth(GET /health) status = %q, want %q", data["status"], "ok")
 	}
 	if data["service"] != "montage" {
-		t.Errorf("expected service 'montage', got '%s'", data["service"])
+		t.Errorf("handleHealth(GET /health) service = %q, want %q", data["service"], "montage")
 	}
 }
 

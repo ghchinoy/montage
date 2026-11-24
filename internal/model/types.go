@@ -104,11 +104,11 @@ type AnalysisFindings struct {
 	HasGenerators bool `json:"has_generators"`
 
 	// Data Interchange Findings
-	HasJSONOutput       bool     `json:"has_json_output"`
-	JSONFlags           []string `json:"json_flags,omitempty"`
-	StructuredFormats   []string `json:"structured_formats,omitempty"` // json, yaml, csv, etc.
-	CleanOutputStreams  bool     `json:"clean_output_streams"`        // logs to stderr, data to stdout
-	DataModels          []string `json:"data_models,omitempty"`       // Firestore, SQL, Pydantic entities
+	HasJSONOutput      bool     `json:"has_json_output"`
+	JSONFlags          []string `json:"json_flags,omitempty"`
+	StructuredFormats  []string `json:"structured_formats,omitempty"` // json, yaml, csv, etc.
+	CleanOutputStreams bool     `json:"clean_output_streams"`         // logs to stderr, data to stdout
+	DataModels         []string `json:"data_models,omitempty"`        // Firestore, SQL, Pydantic entities
 
 	// Execution Safety Findings
 	HasDryRunFlag       bool     `json:"has_dry_run_flag"`
@@ -215,12 +215,12 @@ const (
 
 // MCPToolSpec defines a candidate MCP tool suggested by Montage.
 type MCPToolSpec struct {
-	Name        string                 `json:"name"`
-	Description string                 `json:"description"`
-	Parameters  map[string]interface{} `json:"parameters,omitempty"`
-	IsReadOnly  bool                   `json:"is_read_only"`
-	SourceCmd   string                 `json:"source_cmd,omitempty"`
-	Grouping    string                 `json:"grouping,omitempty"`
+	Name        string         `json:"name"`
+	Description string         `json:"description"`
+	Parameters  map[string]any `json:"parameters,omitempty"`
+	IsReadOnly  bool           `json:"is_read_only"`
+	SourceCmd   string         `json:"source_cmd,omitempty"`
+	Grouping    string         `json:"grouping,omitempty"`
 }
 
 // PureSkillRecommendation details the Pure Skill opportunity.

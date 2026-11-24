@@ -33,6 +33,11 @@ pnpm-debug.log*
 .env.*
 !.env.example
 
+# Agent and issue-tracker local state
+.serena/
+.beads/
+.dolt/
+
 # OS and Editor files
 .DS_Store
 .DS_Store?

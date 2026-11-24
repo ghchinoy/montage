@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "montage",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Assess existing applications and determine what Agent Ecosystem tooling can be built from them (Plugins, Skills, MCP Servers, and CLIs).",
   "author": {
     "name": "ghchinoy",

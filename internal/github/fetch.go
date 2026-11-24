@@ -10,11 +10,26 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
 	"github.com/ghchinoy/montage/internal/model"
 )
+
+var validGitHubNameRe = regexp.MustCompile(`^[A-Za-z0-9](?:[A-Za-z0-9._-]{0,99})$`)
+
+// validateRepoName ensures owner and repo are safe GitHub identifiers with no
+// leading hyphens (preventing CLI argument injection) or path traversal segments.
+func validateRepoName(owner, repo string) error {
+	if !validGitHubNameRe.MatchString(owner) || owner == "." || owner == ".." {
+		return fmt.Errorf("invalid GitHub owner %q", owner)
+	}
+	if !validGitHubNameRe.MatchString(repo) || repo == "." || repo == ".." {
+		return fmt.Errorf("invalid GitHub repository %q", repo)
+	}
+	return nil
+}
 
 // ResolveGitHubToken returns a GitHub personal access token if present in environment variables.
 func ResolveGitHubToken() string {
@@ -48,25 +63,34 @@ func ParseRepoRef(input string) (string, string, error) {
 		}
 		parts := strings.Split(strings.Trim(u.Path, "/"), "/")
 		if len(parts) >= 2 {
+			if err := validateRepoName(parts[0], parts[1]); err != nil {
+				return "", "", err
+			}
 			return parts[0], parts[1], nil
 		}
-		return "", "", fmt.Errorf("URL does not contain owner/repo: %s", input)
+		return "", "", fmt.Errorf("URL does not contain owner/repo: %q", input)
 	}
 
 	if strings.HasPrefix(clean, "github.com/") {
 		parts := strings.Split(strings.TrimPrefix(clean, "github.com/"), "/")
 		if len(parts) >= 2 {
+			if err := validateRepoName(parts[0], parts[1]); err != nil {
+				return "", "", err
+			}
 			return parts[0], parts[1], nil
 		}
-		return "", "", fmt.Errorf("invalid github.com path: %s", input)
+		return "", "", fmt.Errorf("invalid github.com path: %q", input)
 	}
 
 	parts := strings.Split(clean, "/")
 	if len(parts) == 2 && parts[0] != "" && parts[1] != "" {
+		if err := validateRepoName(parts[0], parts[1]); err != nil {
+			return "", "", err
+		}
 		return parts[0], parts[1], nil
 	}
 
-	return "", "", fmt.Errorf("unrecognized GitHub repo specification: %s (expected owner/repo or https://github.com/owner/repo)", input)
+	return "", "", fmt.Errorf("unrecognized GitHub repo specification %q (expected owner/repo or https://github.com/owner/repo)", input)
 }
 
 // IsGitHubTarget checks if the input is a GitHub URL or owner/repo format rather than a local path.
@@ -100,10 +124,10 @@ type ghPublicRepoResponse struct {
 }
 
 type ghRepoView struct {
-	Name            string `json:"name"`
-	NameWithOwner   string `json:"nameWithOwner"`
-	Description     string `json:"description"`
-	URL             string `json:"url"`
+	Name             string `json:"name"`
+	NameWithOwner    string `json:"nameWithOwner"`
+	Description      string `json:"description"`
+	URL              string `json:"url"`
 	DefaultBranchRef struct {
 		Name string `json:"name"`
 	} `json:"defaultBranchRef"`
@@ -126,6 +150,9 @@ type ghRepoView struct {
 // FetchRepoMetadata retrieves repository information using the GitHub public REST API (unauthenticated or with GITHUB_TOKEN),
 // with a fallback to `gh repo view` if the CLI is authenticated.
 func FetchRepoMetadata(owner, repo string) (*model.TargetInfo, error) {
+	if err := validateRepoName(owner, repo); err != nil {
+		return nil, err
+	}
 	if err := CheckPrerequisites(); err != nil {
 		return nil, err
 	}
@@ -159,7 +186,7 @@ func fetchMetadataHTTP(owner, repo string) (*model.TargetInfo, error) {
 		return nil, err
 	}
 
-	req.Header.Set("User-Agent", "Montage/0.2.0")
+	req.Header.Set("User-Agent", "Montage/0.2.1")
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 
 	if token := ResolveGitHubToken(); token != "" {
@@ -174,7 +201,7 @@ func fetchMetadataHTTP(owner, repo string) (*model.TargetInfo, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		var errData map[string]interface{}
+		var errData map[string]any
 		_ = json.NewDecoder(resp.Body).Decode(&errData)
 		msg, _ := errData["message"].(string)
 		if resp.StatusCode == http.StatusForbidden && strings.Contains(strings.ToLower(msg), "rate limit") {
@@ -215,8 +242,9 @@ func fetchMetadataHTTP(owner, repo string) (*model.TargetInfo, error) {
 func fetchMetadataCLI(owner, repo string) (*model.TargetInfo, error) {
 	nwo := fmt.Sprintf("%s/%s", owner, repo)
 	args := []string{
-		"repo", "view", nwo,
+		"repo", "view",
 		"--json", "name,nameWithOwner,description,url,defaultBranchRef,primaryLanguage,languages,repositoryTopics,stargazerCount,createdAt,pushedAt",
+		"--", nwo,
 	}
 
 	cmd := exec.Command("gh", args...)
@@ -278,6 +306,9 @@ func fetchMetadataCLI(owner, repo string) (*model.TargetInfo, error) {
 // CloneOrPull clones the target GitHub repository into sourcesDir (default: ./sources/owner/repo).
 // It uses standard anonymous `git clone --depth 1` for public repositories, or attaches GITHUB_TOKEN if present.
 func CloneOrPull(owner, repo, sourcesDir string) (string, error) {
+	if err := validateRepoName(owner, repo); err != nil {
+		return "", err
+	}
 	if err := CheckPrerequisites(); err != nil {
 		return "", err
 	}
@@ -292,6 +323,10 @@ func CloneOrPull(owner, repo, sourcesDir string) (string, error) {
 	}
 
 	targetDir := filepath.Join(absSourcesDir, owner, repo)
+	rel, err := filepath.Rel(absSourcesDir, targetDir)
+	if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+		return "", fmt.Errorf("target path escapes sources directory for %s/%s", owner, repo)
+	}
 
 	// Check if already cloned and has files
 	if entries, err := os.ReadDir(targetDir); err == nil && len(entries) > 0 {
@@ -303,12 +338,13 @@ func CloneOrPull(owner, repo, sourcesDir string) (string, error) {
 	}
 
 	// Strategy 1: Standard git clone (Anonymous public clone or token-authenticated)
+	token := ResolveGitHubToken()
 	cloneURL := fmt.Sprintf("https://github.com/%s/%s.git", owner, repo)
-	if token := ResolveGitHubToken(); token != "" {
+	if token != "" {
 		cloneURL = fmt.Sprintf("https://x-access-token:%s@github.com/%s/%s.git", token, owner, repo)
 	}
 
-	cmd := exec.Command("git", "clone", "--depth", "1", cloneURL, targetDir)
+	cmd := exec.Command("git", "clone", "--depth", "1", "--", cloneURL, targetDir)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 
@@ -317,12 +353,15 @@ func CloneOrPull(owner, repo, sourcesDir string) (string, error) {
 	}
 
 	gitErr := strings.TrimSpace(stderr.String())
+	if token != "" {
+		gitErr = strings.ReplaceAll(gitErr, token, "[REDACTED]")
+	}
 
 	// Strategy 2: Fallback to `gh repo clone` if installed and authenticated
 	if _, err := exec.LookPath("gh"); err == nil {
 		nwo := fmt.Sprintf("%s/%s", owner, repo)
 		ghCmd := exec.Command("gh", "repo", "clone", nwo, targetDir, "--", "--depth", "1")
-		if token := ResolveGitHubToken(); token != "" {
+		if token != "" {
 			ghCmd.Env = append(os.Environ(), "GH_TOKEN="+token)
 		}
 		var ghStderr bytes.Buffer

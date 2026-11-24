@@ -1,7 +1,6 @@
 package evaluator
 
 import (
-	"context"
 	"testing"
 
 	"github.com/ghchinoy/montage/internal/model"
@@ -27,18 +26,18 @@ func TestEvaluateScoring(t *testing.T) {
 		ReadOnlyCommands:   []string{"map", "suggest", "render"},
 	}
 
-	rep := Evaluate(context.Background(), target, findings, false)
+	rep := Evaluate(t.Context(), target, findings, false)
 
 	if rep.OverallScore < 85 {
-		t.Errorf("expected high agent-readiness score, got %d", rep.OverallScore)
+		t.Errorf("Evaluate(%q) OverallScore = %d, want >= 85", target.Name, rep.OverallScore)
 	}
 
 	if rep.Tier != model.Tier5AgentNative {
-		t.Errorf("expected Tier 5: Agent-Native, got %s", rep.Tier)
+		t.Errorf("Evaluate(%q) Tier = %q, want %q", target.Name, rep.Tier, model.Tier5AgentNative)
 	}
 
 	if len(rep.Dimensions) != 5 {
-		t.Errorf("expected 5 dimensions, got %d", len(rep.Dimensions))
+		t.Errorf("Evaluate(%q) len(Dimensions) = %d, want 5", target.Name, len(rep.Dimensions))
 	}
 }
 
@@ -53,9 +52,9 @@ func TestEvaluateManualApp(t *testing.T) {
 		HasJSONOutput:    false,
 	}
 
-	rep := Evaluate(context.Background(), target, findings, false)
+	rep := Evaluate(t.Context(), target, findings, false)
 
 	if rep.OverallScore > 50 {
-		t.Errorf("expected low readiness score for manual app, got %d", rep.OverallScore)
+		t.Errorf("Evaluate(%q) OverallScore = %d, want <= 50", target.Name, rep.OverallScore)
 	}
 }

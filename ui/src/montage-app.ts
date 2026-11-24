@@ -203,7 +203,7 @@ export class MontageApp extends LitElement {
           <a href="/" class="brand">
             <span class="brand-logo">🎞️</span>
             <span>Montage</span>
-            <span class="version-tag">v0.2.0</span>
+            <span class="version-tag">v0.2.1</span>
           </a>
 
           <div class="header-links">

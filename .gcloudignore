@@ -1,0 +1,15 @@
+.git/
+.gitignore
+.serena/
+.beads/
+.dolt/
+sources/
+out/
+bin/
+docs-site/
+node_modules/
+ui/node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example

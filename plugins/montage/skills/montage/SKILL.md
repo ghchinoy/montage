@@ -3,7 +3,7 @@ name: montage
 description: Evaluate applications and GitHub repositories for agent readiness, extract fine-grained capabilities (APIs, CLI command trees, scripts, authored sub-agent prompts, package engines), and generate modular Agent Plugins, multi-skill blueprints, and clustered MCP servers.
 license: Apache-2.0
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Montage Agent Assessment & Scaffolding Skill

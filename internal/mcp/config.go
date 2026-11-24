@@ -42,7 +42,7 @@ var mcpConfigCmd = &cobra.Command{
 		case "all":
 			printAllConfigs(binPath)
 		default:
-			return fmt.Errorf("unknown client '%s'. Supported: all, claude, cursor, opencode", client)
+			return fmt.Errorf("unknown client %q; supported: all, claude, cursor, opencode", client)
 		}
 
 		return nil
@@ -50,9 +50,9 @@ var mcpConfigCmd = &cobra.Command{
 }
 
 func printClaudeConfig(binPath string) {
-	cfg := map[string]interface{}{
-		"mcpServers": map[string]interface{}{
-			"montage": map[string]interface{}{
+	cfg := map[string]any{
+		"mcpServers": map[string]any{
+			"montage": map[string]any{
 				"command": binPath,
 				"args":    []string{"mcp"},
 			},
@@ -63,9 +63,9 @@ func printClaudeConfig(binPath string) {
 }
 
 func printCursorConfig(binPath string) {
-	cfg := map[string]interface{}{
-		"mcpServers": map[string]interface{}{
-			"montage": map[string]interface{}{
+	cfg := map[string]any{
+		"mcpServers": map[string]any{
+			"montage": map[string]any{
 				"command": binPath,
 				"args":    []string{"mcp"},
 			},
@@ -76,9 +76,9 @@ func printCursorConfig(binPath string) {
 }
 
 func printOpenCodeConfig(binPath string) {
-	cfg := map[string]interface{}{
-		"mcpServers": map[string]interface{}{
-			"montage": map[string]interface{}{
+	cfg := map[string]any{
+		"mcpServers": map[string]any{
+			"montage": map[string]any{
 				"command": binPath,
 				"args":    []string{"mcp"},
 			},

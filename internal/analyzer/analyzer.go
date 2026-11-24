@@ -291,14 +291,14 @@ func extractReadmeDescription(root string) string {
 // Regex patterns for inspection
 var (
 	// CLI framework detectors
-	reCobraCmd = regexp.MustCompile(`(&cobra\.Command|cobra\.Command)\s*\{`)
-	reCobraUse = regexp.MustCompile(`Use:\s*"([^"\s]+)`)
+	reCobraCmd   = regexp.MustCompile(`(&cobra\.Command|cobra\.Command)\s*\{`)
+	reCobraUse   = regexp.MustCompile(`Use:\s*"([^"\s]+)`)
 	reCobraShort = regexp.MustCompile(`Short:\s*"([^"]+)`)
-	reUrfaveCmd = regexp.MustCompile(`(&cli\.Command|cli\.Command)\s*\{`)
-	reClickCmd  = regexp.MustCompile(`@(click|cli)\.(command|group)\s*\(`)
-	reArgparse  = regexp.MustCompile(`ArgumentParser\s*\(`)
-	reCommander = regexp.MustCompile(`\.(command|description|action)\s*\(`)
-	reClap      = regexp.MustCompile(`(#\[derive\((.*Parser|.*Subcommand)\)\]|clap::Command::new\("([^"]+)"\))`)
+	reUrfaveCmd  = regexp.MustCompile(`(&cli\.Command|cli\.Command)\s*\{`)
+	reClickCmd   = regexp.MustCompile(`@(click|cli)\.(command|group)\s*\(`)
+	reArgparse   = regexp.MustCompile(`ArgumentParser\s*\(`)
+	reCommander  = regexp.MustCompile(`\.(command|description|action)\s*\(`)
+	reClap       = regexp.MustCompile(`(#\[derive\((.*Parser|.*Subcommand)\)\]|clap::Command::new\("([^"]+)"\))`)
 
 	// Flag detectors
 	reFlagJSON   = regexp.MustCompile(`(?i)(--(json|format)|"json"|"format")`)

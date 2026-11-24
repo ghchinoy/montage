@@ -38,10 +38,10 @@ type AssessParams struct {
 
 // AssessResult defines the output of the assess_repository MCP tool.
 type AssessResult struct {
-	Report         *model.AssessmentReport `json:"report"`
-	MarkdownPath   string                  `json:"markdown_path,omitempty"`
-	JSONPath       string                  `json:"json_path,omitempty"`
-	ScaffoldFiles  []string                `json:"scaffold_files,omitempty"`
+	Report        *model.AssessmentReport `json:"report"`
+	MarkdownPath  string                  `json:"markdown_path,omitempty"`
+	JSONPath      string                  `json:"json_path,omitempty"`
+	ScaffoldFiles []string                `json:"scaffold_files,omitempty"`
 }
 
 // EvaluateParams defines input parameters for quick evaluation without file I/O.
